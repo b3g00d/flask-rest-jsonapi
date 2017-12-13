@@ -96,6 +96,9 @@ class SqlalchemyDataLayer(BaseDataLayer):
 
         query = self.query(view_kwargs)
 
+        if qs.distinct:
+            query = self.distinct(query, qs.distinct)
+
         if qs.filters:
             query = self.filter_query(query, qs.filters, self.model)
 
@@ -448,6 +451,10 @@ class SqlalchemyDataLayer(BaseDataLayer):
             if not hasattr(self.model, field):
                 raise InvalidSort("{} has no attribute {}".format(self.model.__name__, field))
             query = query.order_by(getattr(getattr(self.model, field), sort_opt['order'])())
+        return query
+
+    def distinct(self, query, column):
+        query = query.distinct(getattr(self.model, column))
         return query
 
     def paginate_query(self, query, paginate_info):

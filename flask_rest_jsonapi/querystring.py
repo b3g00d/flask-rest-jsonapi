@@ -19,6 +19,7 @@ class QueryStringManager(object):
         'fields',
         'sort',
         'include'
+        'distinct'
     )
 
     def __init__(self, querystring, schema):
@@ -66,6 +67,15 @@ class QueryStringManager(object):
         :return dict: dict of managed querystring parameter
         """
         return {key: value for (key, value) in self.qs.items() if key.startswith(self.MANAGED_KEYS)}
+
+    @property
+    def distinct(self):
+        """Return distinct from query string.
+
+        :return list: distinct information
+        """
+        return self.qs.get('distinct')
+
 
     @property
     def filters(self):
