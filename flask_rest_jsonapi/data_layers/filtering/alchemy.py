@@ -41,6 +41,8 @@ class Node(object):
     def resolve(self):
         """Create filter for a particular node of the filter tree"""
         if 'or' not in self.filter_ and 'and' not in self.filter_ and 'not' not in self.filter_:
+            if self.operator == "distinct":
+                return getattr(self.column, self.operator)
             value = self.value
 
             if isinstance(value, dict):
@@ -137,8 +139,7 @@ class Node(object):
                 return result
         else:
             if 'val' not in self.filter_:
-                if self.operator != "distinct":
-                    raise InvalidFilters("Can't find value or field in a filter")
+                raise InvalidFilters("Can't find value or field in a filter")
 
             return self.filter_['val']
 
