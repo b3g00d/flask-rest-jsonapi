@@ -137,7 +137,8 @@ class Node(object):
                 return result
         else:
             if 'val' not in self.filter_:
-                raise InvalidFilters("Can't find value or field in a filter")
+                if self.operator != "distinct":
+                    raise InvalidFilters("Can't find value or field in a filter")
 
             return self.filter_['val']
 
