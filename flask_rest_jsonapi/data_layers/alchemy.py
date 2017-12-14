@@ -96,8 +96,9 @@ class SqlalchemyDataLayer(BaseDataLayer):
 
         query = self.query(view_kwargs)
 
+        from sqlalchemy import distinct
         if qs.distinct:
-            query = self.distinct(query, qs.distinct)
+            query = self.session.query(distinct(getattr(self.model, query)))
 
         if qs.filters:
             query = self.filter_query(query, qs.filters, self.model)
